@@ -19,4 +19,5 @@ export const auth = betterAuth({
       disableDefaultReference: true,
     }),
   ],
+  trustedOrigins: ['http://localhost:3000', 'http://localhost:5173'],
 });
