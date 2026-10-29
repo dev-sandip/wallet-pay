@@ -5,10 +5,10 @@ import { GlobalExceptionFilter } from './common/filters/global-exception.filter.
 import { TransformInterceptor } from './common/interceptors/transform.interceptor.js';
 import { TimeoutInterceptor } from './common/interceptors/timeout.interceptor.js';
 import { TrimBodyInterceptor } from './common/interceptors/trim-body.interceptor.js';
-import { SanitizeResponseInterceptor } from './common/interceptors/sanitize-response.interceptor.js';
 import { getEnv } from './env.js';
 import { Logger } from '@nestjs/common';
 import { setupSwagger } from './common/utils/swagger.js';
+import { LoggingInterceptor } from './common/interceptors/logging.interceptor.js';
 
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
@@ -27,7 +27,7 @@ async function bootstrap() {
     new TransformInterceptor(),
     new TimeoutInterceptor(),
     new TrimBodyInterceptor(),
-    new SanitizeResponseInterceptor(),
+    new LoggingInterceptor(),
   );
 
   await app.listen(getEnv('PORT'));
