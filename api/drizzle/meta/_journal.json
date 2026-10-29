@@ -29,6 +29,20 @@
       "when": 1793250787587,
       "tag": "0003_sturdy_stingray",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1793272685923,
+      "tag": "0004_messy_hairball",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1793273184919,
+      "tag": "0005_cool_paibok",
+      "breakpoints": true
     }
   ]
 }

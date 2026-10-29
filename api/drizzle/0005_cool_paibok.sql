@@ -1,0 +1,4 @@
+ALTER TABLE "transfers" ADD CONSTRAINT "transfers_sender_wallet_id_wallets_id_fk" FOREIGN KEY ("sender_wallet_id") REFERENCES "public"."wallets"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "transfers" ADD CONSTRAINT "transfers_receiver_wallet_id_wallets_id_fk" FOREIGN KEY ("receiver_wallet_id") REFERENCES "public"."wallets"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "transfers" ADD CONSTRAINT "transfers_amount_positive" CHECK ("transfers"."amount_minor" > 0);--> statement-breakpoint
+ALTER TABLE "transfers" ADD CONSTRAINT "transfers_different_wallets" CHECK ("transfers"."sender_wallet_id" <> "transfers"."receiver_wallet_id");

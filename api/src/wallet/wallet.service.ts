@@ -10,6 +10,7 @@ import { and, eq } from 'drizzle-orm';
 
 import * as schema from '../db/schema.js';
 import { CreateWalletDto } from './dtos/create-wallet.dto.js';
+import { MoneyUtil } from '../common/utils/money.js';
 
 @Injectable()
 export class WalletService {
@@ -107,5 +108,34 @@ export class WalletService {
         'Wallet not found or does not belong to this user',
       );
     }
+  }
+
+  async getBalance(phoneNumber: string, userId: string) {
+    const [wallet] = await this.db
+      .select({
+        balance: schema.wallets.balanceMinor,
+        currency: schema.wallets.currency,
+      })
+      .from(schema.wallets)
+      .where(
+        and(
+          eq(schema.wallets.phoneNumber, phoneNumber),
+          eq(schema.wallets.userId, userId),
+        ),
+      )
+      .limit(1);
+
+    if (!wallet) {
+      throw new NotFoundException(
+        'Wallet not found or does not belong to this user',
+      );
+    }
+
+    return {
+      balanceMinor: wallet.balance,
+      balance: MoneyUtil.toRupees(wallet.balance),
+      currency: wallet.currency,
+      formattedBalance: MoneyUtil.formatNPR(wallet.balance),
+    };
   }
 }

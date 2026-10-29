@@ -1,59 +1,50 @@
 import {
-  CallHandler,
-  ExecutionContext,
   Injectable,
-  Logger,
   NestInterceptor,
+  ExecutionContext,
+  CallHandler,
+  Logger,
 } from '@nestjs/common';
-import type { Request, Response } from 'express';
-import { Observable, throwError } from 'rxjs';
-import { catchError, finalize, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Injectable()
+/** Logs the HTTP method, URL, status code, and request duration. */
 export class LoggingInterceptor implements NestInterceptor {
-  private readonly logger = new Logger(LoggingInterceptor.name);
+  /** Logger used for HTTP request and error messages. */
+  private readonly logger = new Logger('HTTP');
 
-  intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
-    const httpContext = context.switchToHttp();
-    const request = httpContext.getRequest<Request>();
-    const response = httpContext.getResponse<Response>();
+  /**
+   * Intercepts an HTTP request and logs its completion or failure details.
+   *
+   * @param context Execution context for the current request.
+   * @param next Handler for the next interceptor or route handler.
+   * @returns Observable containing the route handler result.
+   */
+  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+    const ctx = context.switchToHttp();
+    const request = ctx.getRequest();
+    const response = ctx.getResponse();
 
-    const { method, originalUrl } = request;
-    const url = originalUrl ?? request.url;
+    const { method, url } = request;
     const startTime = Date.now();
 
-    this.logger.log(`Incoming Request: ${method} ${url}`);
-
     return next.handle().pipe(
-      tap(() => {
-        const duration = Date.now() - startTime;
+      tap({
+        next: () => {
+          const statusCode = response.statusCode;
+          const duration = Date.now() - startTime;
 
-        this.logger.log(
-          `Outgoing Response: ${method} ${url} | ` +
-            `Status: ${response.statusCode} | ${duration}ms`,
-        );
-      }),
-      catchError((error: unknown) => {
-        const duration = Date.now() - startTime;
+          this.logger.log(`${method} ${url} ${statusCode} - ${duration}ms`);
+        },
+        error: (err) => {
+          const statusCode = err.status || 500;
+          const duration = Date.now() - startTime;
 
-        const statusCode =
-          typeof error === 'object' &&
-          error !== null &&
-          'status' in error &&
-          typeof error.status === 'number'
-            ? error.status
-            : 500;
-
-        this.logger.error(
-          `Request Failed: ${method} ${url} | ` +
-            `Status: ${statusCode} | ${duration}ms`,
-        );
-
-        return throwError(() => error);
-      }),
-      finalize(() => {
-        // Runs when the request stream completes, errors, or is cancelled.
-        // Avoid logging again here because tap/catchError already log outcomes.
+          this.logger.error(
+            `${method} ${url} ${statusCode} - ${duration}ms - Error: ${err.message}`,
+          );
+        },
       }),
     );
   }

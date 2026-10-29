@@ -1,4 +1,3 @@
-// src/main.ts
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module.js';
 import { GlobalExceptionFilter } from './common/filters/global-exception.filter.js';

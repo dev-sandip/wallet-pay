@@ -38,6 +38,15 @@ export class WalletController {
     return await this.walletService.getUserWallet(session.user.id);
   }
 
+  @Get('/:phoneNumber/balance')
+  @ApiOperation({ summary: 'Get the balance of a wallet by phone number' })
+  async getWalletBalance(
+    @Session() session: UserSession,
+    @Param('phoneNumber') phoneNumber: string,
+  ) {
+    return await this.walletService.getBalance(phoneNumber, session.user.id);
+  }
+
   @Delete('/:walletId')
   @ApiOperation({ summary: 'Delete a wallet by ID' })
   async deleteWallet(

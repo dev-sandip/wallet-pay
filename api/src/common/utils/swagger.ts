@@ -3,6 +3,11 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { apiReference } from '@scalar/nestjs-api-reference';
 import { auth } from '../../auth/auth.js';
 
+/**
+ * Configures API documentation and mounts the Scalar reference UI.
+ *
+ * @param app - The NestJS application to configure.
+ */
 export async function setupSwagger(app: INestApplication) {
   const config = new DocumentBuilder()
     .setTitle('Wallet Pay API')
@@ -38,7 +43,9 @@ export async function setupSwagger(app: INestApplication) {
       ...authOpenAPISchema.components.schemas,
     };
   }
-
+  app.getHttpAdapter().get('/docs/openapi.json', (_req, res) => {
+    res.json(document);
+  });
   app.use(
     '/docs',
     apiReference({

@@ -8,6 +8,7 @@ import { auth } from './auth/auth.js';
 import { WalletController } from './wallet/wallet.controller.js';
 import { WalletService } from './wallet/wallet.service.js';
 import { WalletModule } from './wallet/wallet.module.js';
+import { TransferModule } from './transfer/transfer.module.js';
 @Module({
   imports: [
     // 1. Official NestJS Drizzle Module
@@ -19,6 +20,7 @@ import { WalletModule } from './wallet/wallet.module.js';
       auth, // Pass your auth instance
     }),
     WalletModule,
+    TransferModule,
   ],
   controllers: [AppController, WalletController],
   providers: [AppService, WalletService],
