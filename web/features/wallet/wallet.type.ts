@@ -67,3 +67,24 @@ export const transactionSchema = z.object({
 export type Transaction = z.infer<typeof transactionSchema>;
 
 export type TransactionQuery = z.infer<typeof transactionQuerySchema>;
+
+export const CreateWalletSchema = z.object({
+  currency: z
+    .string()
+    .length(3)
+    .regex(/^[A-Z]{3}$/, {
+      message: "Currency must be a 3-letter uppercase currency code",
+    })
+    .optional()
+    .default("NPR"),
+
+  phoneNumber: z.string().regex(/^(?:9[678]\d{8})$/, {
+    message: "Phone number must be a valid 10-digit Nepali mobile number",
+  }),
+});
+
+// Raw form values (before Zod validation)
+export type CreateWalletFormValues = z.input<typeof CreateWalletSchema>;
+
+// Validated values (after Zod validation)
+export type CreateWallet = z.output<typeof CreateWalletSchema>;

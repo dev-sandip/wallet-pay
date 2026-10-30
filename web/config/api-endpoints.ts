@@ -12,6 +12,7 @@ export const API_ENDPOINTS = {
 
 export const QUERY_KEYS = {
   wallet: {
+    create: () => [...QUERY_KEYS.wallet.all, "create"] as const,
     all: ["wallets"] as const,
     list: () => [...QUERY_KEYS.wallet.all, "list"] as const,
     getUserBalance: (phoneNumber: string) =>

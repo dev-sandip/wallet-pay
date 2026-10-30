@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { authClient } from "@/lib/auth";
+import Link from "next/link";
 
 const loginSchema = z.object({
   email: z
@@ -167,13 +168,13 @@ export default function LoginForm() {
 
         {/* Password reset */}
         <p className="mt-6 text-pretty text-muted-foreground text-sm">
-          Forgot your password?{" "}
-          <a
+          New here?{" "}
+          <Link
             className="font-medium text-primary hover:text-primary/90"
-            href="/forgot-password"
+            href="/signup"
           >
-            Reset password
-          </a>
+            Sign Up
+          </Link>
         </p>
       </div>
     </div>

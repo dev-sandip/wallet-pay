@@ -1,5 +1,6 @@
 import { api } from "@/lib/axios";
 import {
+  CreateWallet,
   Transaction,
   TransactionQuery,
   Wallet,
@@ -29,5 +30,12 @@ export const WalletService = {
     );
 
     return response.data.data.data;
+  },
+  async createWallet(data: CreateWallet) {
+    const response = await api.post<ApiResponse<Wallet>>(
+      API_ENDPOINTS.wallet.create,
+      data,
+    );
+    return response.data.data;
   },
 };

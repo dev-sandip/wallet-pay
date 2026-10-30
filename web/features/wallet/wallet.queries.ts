@@ -1,8 +1,8 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { QUERY_KEYS } from "@/config/api-endpoints";
 import { WalletService } from "./wallet.service";
-import { TransactionQuery } from "./wallet.type";
+import { CreateWallet, TransactionQuery } from "./wallet.type";
 
 export function useGetUserBalance(phoneNumber: string) {
   return useQuery({
@@ -24,16 +24,14 @@ export function useGetTransactions(params: TransactionQuery) {
     queryFn: () => WalletService.getTransactions(params),
   });
 }
-// export function useCreateUser() {
-//   const queryClient = useQueryClient();
-
-//   return useMutation({
-//     mutationFn: (input: CreateUserInput) =>
-//       usersService.create(input),
-
-//     onSuccess: async () => {
-//       await queryClient.invalidateQueries({
-//         queryKey: QUERY_KEYS.users.all,
-//       });
-//     },
-//   });
+export function useCreateWallet() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (input: CreateWallet) => WalletService.createWallet(input),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.wallet.create(),
+      });
+    },
+  });
+}
