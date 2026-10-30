@@ -34,3 +34,36 @@ export const walletBalanceResponseSchema = z.object({
 });
 
 export type WalletBalanceResponse = z.infer<typeof walletBalanceResponseSchema>;
+
+export const transactionTypeSchema = z.enum(["SENT", "RECEIVED"]);
+
+export type TransactionType = z.infer<typeof transactionTypeSchema>;
+
+export const transactionQuerySchema = z.object({
+  limit: z.coerce.number().int().min(1).max(50).default(10),
+  cursor: z.string().optional(),
+  type: transactionTypeSchema.optional(),
+});
+
+export const transactionSchema = z.object({
+  id: z.string().uuid(),
+
+  type: z.enum(["SENT", "RECEIVED"]),
+
+  amountMinor: z.number().int().nonnegative(),
+
+  currency: z.string().length(3),
+
+  status: z.enum(["PENDING", "COMPLETED", "FAILED", "CANCELLED"]),
+
+  counterparty: z.object({
+    name: z.string(),
+    phoneNumber: z.string(),
+  }),
+
+  createdAt: z.iso.datetime(),
+});
+
+export type Transaction = z.infer<typeof transactionSchema>;
+
+export type TransactionQuery = z.infer<typeof transactionQuerySchema>;

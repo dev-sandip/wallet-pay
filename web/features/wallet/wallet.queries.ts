@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import { QUERY_KEYS } from "@/config/api-endpoints";
 import { WalletService } from "./wallet.service";
+import { TransactionQuery } from "./wallet.type";
 
 export function useGetUserBalance(phoneNumber: string) {
   return useQuery({
@@ -14,6 +15,13 @@ export function useGetUserWallets() {
   return useQuery({
     queryKey: [QUERY_KEYS.wallet.list()],
     queryFn: () => WalletService.getUserWallets(),
+  });
+}
+
+export function useGetTransactions(params: TransactionQuery) {
+  return useQuery({
+    queryKey: [QUERY_KEYS.transaction.list(), params],
+    queryFn: () => WalletService.getTransactions(params),
   });
 }
 // export function useCreateUser() {
