@@ -1,4 +1,12 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Headers,
+  Ip,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -7,12 +15,18 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { TransferService } from './transfer.service.js';
-import { Session, type UserSession } from '@thallesp/nestjs-better-auth';
+import {
+  AuthGuard,
+  Session,
+  type UserSession,
+} from '@thallesp/nestjs-better-auth';
 import { TransferFundsDto } from './dtos/transfer-funds.dto.js';
+import type { Request } from 'express';
 
 @Controller('transfer')
 @ApiTags('transfer')
 @ApiBearerAuth()
+@UseGuards(AuthGuard)
 export class TransferController {
   constructor(private readonly transferService: TransferService) {}
   @Post()
@@ -24,7 +38,14 @@ export class TransferController {
   async transferFunds(
     @Session() userSession: UserSession,
     @Body() dto: TransferFundsDto,
+    @Headers('idempotency-key') idempotencyKey: string,
+    @Ip() ipAddress: string,
+    @Req() req: Request,
   ) {
-    return this.transferService.transferFunds(dto, userSession.user.id);
+    return this.transferService.transferFunds(dto, userSession.user.id, {
+      idempotencyKey,
+      ipAddress,
+      userAgent: req.headers['user-agent'],
+    });
   }
 }

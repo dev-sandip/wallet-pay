@@ -21,16 +21,11 @@ export const transfers = pgTable(
   'transfers',
   {
     id: uuid('id').primaryKey().defaultRandom(),
-
-    senderWalletId: varchar('sender_wallet_id', {
-      length: 255,
-    })
+    senderWalletId: uuid('sender_wallet_id')
       .notNull()
       .references(() => wallets.id),
 
-    receiverWalletId: varchar('receiver_wallet_id', {
-      length: 255,
-    })
+    receiverWalletId: uuid('receiver_wallet_id')
       .notNull()
       .references(() => wallets.id),
 
