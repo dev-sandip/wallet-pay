@@ -3,6 +3,8 @@ import {
   CreateWallet,
   Transaction,
   TransactionQuery,
+  TransferFundResponse,
+  TransferFunds,
   Wallet,
   WalletBalanceResponse,
 } from "./wallet.type";
@@ -36,6 +38,20 @@ export const WalletService = {
       API_ENDPOINTS.wallet.create,
       data,
     );
+    return response.data.data;
+  },
+  //it requires ideomptency key to avoid duplicate transactions, so we will need to generate a unique key for each transfer request in request header as well
+  async transferFunds(data: TransferFunds, idempotencyKey: string) {
+    const response = await api.post<ApiResponse<TransferFundResponse>>(
+      API_ENDPOINTS.transfer.transferFunds,
+      data,
+      {
+        headers: {
+          "Idempotency-Key": idempotencyKey,
+        },
+      },
+    );
+
     return response.data.data;
   },
 };

@@ -88,3 +88,23 @@ export type CreateWalletFormValues = z.input<typeof CreateWalletSchema>;
 
 // Validated values (after Zod validation)
 export type CreateWallet = z.output<typeof CreateWalletSchema>;
+
+export const TransferFundsSchema = z.object({
+  receiverPhoneNumber: z.string().regex(/^(?:\+977)?9[678]\d{8}$/, {
+    message: "Invalid Nepal phone number",
+  }),
+
+  amount: z.number().int().min(1).max(Number.MAX_SAFE_INTEGER),
+});
+
+export type TransferFunds = z.infer<typeof TransferFundsSchema>;
+
+export interface TransferFundResponse {
+  id: string;
+  senderWalletId: string;
+  receiverWalletId: string;
+  amountMinor: number;
+  status: "PENDING" | "COMPLETED" | "FAILED";
+  createdAt: string;
+  updatedAt: string;
+}

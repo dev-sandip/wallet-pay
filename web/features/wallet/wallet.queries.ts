@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { QUERY_KEYS } from "@/config/api-endpoints";
 import { WalletService } from "./wallet.service";
-import { CreateWallet, TransactionQuery } from "./wallet.type";
+import { CreateWallet, TransactionQuery, TransferFunds } from "./wallet.type";
 
 export function useGetUserBalance(phoneNumber: string) {
   return useQuery({
@@ -31,6 +31,19 @@ export function useCreateWallet() {
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: QUERY_KEYS.wallet.create(),
+      });
+    },
+  });
+}
+
+export function useTransferFunds() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (input: { data: TransferFunds; idempotencyKey: string }) =>
+      WalletService.transferFunds(input.data, input.idempotencyKey),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.transfer.transferFunds(),
       });
     },
   });

@@ -8,6 +8,9 @@ export const API_ENDPOINTS = {
   transaction: {
     list: "/wallet/transactions",
   },
+  transfer: {
+    transferFunds: "/transfer",
+  },
 };
 
 export const QUERY_KEYS = {
@@ -27,5 +30,9 @@ export const QUERY_KEYS = {
       cursor?: string;
       type?: "SENT" | "RECEIVED";
     }) => [...QUERY_KEYS.transaction.all, "getTransactions", params] as const,
+  },
+  transfer: {
+    all: ["transfer"] as const,
+    transferFunds: () => [...QUERY_KEYS.transfer.all, "transferFunds"] as const,
   },
 };

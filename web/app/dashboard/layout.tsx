@@ -38,6 +38,7 @@ import {
 
 const links = [
   { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
+  { href: "/dashboard/transfers", label: "Transfers", icon: ArrowLeftRight },
   { href: "/dashboard/wallets", label: "Wallets", icon: Wallet },
   {
     href: "/dashboard/transactions",
