@@ -19,6 +19,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { authClient } from "@/lib/auth";
+import { ArrowLeftRight, LayoutDashboard, User, Wallet } from "lucide-react";
 
 import {
   Sidebar,
@@ -36,10 +37,14 @@ import {
 } from "@/components/ui/sidebar";
 
 const links = [
-  { href: "/dashboard", label: "Overview" },
-  { href: "/dashboard/wallets", label: "Wallets" },
-  { href: "/dashboard/transactions", label: "Transactions" },
-  { href: "/dashboard/profile", label: "Profile" },
+  { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
+  { href: "/dashboard/wallets", label: "Wallets", icon: Wallet },
+  {
+    href: "/dashboard/transactions",
+    label: "Transactions",
+    icon: ArrowLeftRight,
+  },
+  { href: "/dashboard/profile", label: "Profile", icon: User },
 ];
 
 function DashboardNavigation() {
@@ -58,6 +63,7 @@ function DashboardNavigation() {
               render={<Link href={link.href} />}
               isActive={isActive}
             >
+              <link.icon />
               {link.label}
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -73,6 +79,7 @@ function DashboardNavigationFallback() {
       {links.map((link) => (
         <SidebarMenuItem key={link.href}>
           <SidebarMenuButton render={<Link href={link.href} />}>
+            <link.icon />
             {link.label}
           </SidebarMenuButton>
         </SidebarMenuItem>
