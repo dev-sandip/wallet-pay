@@ -3,8 +3,9 @@ import { Geist, Geist_Mono, Figtree } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { cn } from "@/lib/utils";
-import { SoundEffects } from "@/components/ui/sound";
 import { QueryProvider } from "@/components/providers/query-provider";
+import { AuthProvider } from "@/components/providers/auth-provider";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const figtree = Figtree({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -25,28 +26,32 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <ThemeProvider
-      attribute="class"
-      defaultTheme="system"
-      enableSystem
-      disableTransitionOnChange
+    <html
+      lang="en"
+      className={cn(
+        "h-full",
+        "antialiased",
+        geistSans.variable,
+        geistMono.variable,
+        "font-sans",
+        figtree.variable,
+      )}
+      suppressHydrationWarning
     >
-      <QueryProvider>
-        <html
-          lang="en"
-          className={cn(
-            "h-full",
-            "antialiased",
-            geistSans.variable,
-            geistMono.variable,
-            "font-sans",
-            figtree.variable,
-          )}
-          suppressHydrationWarning
+      <body className="min-h-full flex flex-col">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
         >
-          <body className="min-h-full flex flex-col">{children}</body>
-        </html>
-      </QueryProvider>
-    </ThemeProvider>
+          <TooltipProvider>
+            <QueryProvider>
+              <AuthProvider>{children}</AuthProvider>
+            </QueryProvider>
+          </TooltipProvider>
+        </ThemeProvider>
+      </body>
+    </html>
   );
 }

@@ -6,7 +6,10 @@ const nextConfig: NextConfig = {
   partialPrefetching: true,
 
   images: {
-    remotePatterns: [{ hostname: "github.com" }],
+    remotePatterns: [
+      { hostname: "github.com" },
+      { hostname: "avatars.githubusercontent.com" },
+    ],
   },
 
   turbopack: {

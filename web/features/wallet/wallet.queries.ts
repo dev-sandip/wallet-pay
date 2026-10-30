@@ -10,6 +10,12 @@ export function useGetUserBalance(phoneNumber: string) {
     enabled: Boolean(phoneNumber),
   });
 }
+export function useGetUserWallets() {
+  return useQuery({
+    queryKey: [QUERY_KEYS.wallet.list()],
+    queryFn: () => WalletService.getUserWallets(),
+  });
+}
 // export function useCreateUser() {
 //   const queryClient = useQueryClient();
 
